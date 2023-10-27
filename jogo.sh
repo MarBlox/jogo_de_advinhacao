@@ -3,13 +3,12 @@
 numero=$((RANDOM % 100 + 1))
 palpite=0
 tentativa=1
-numero_hard=0
 maior=150
 menor=1
 
-ren1="^[0-3]+$"
-ren="^[0-9]+$"
-rem="^[A-Z][a-z]+$"
+ren1=^[0-3]$
+ren=^[0-9]+$
+rem=^[A-Z][a-z]+$
 
 echo "Olá bem-vindo ao jogo criado por Marco Melo"
 echo "Escolha uma opção"
@@ -23,7 +22,7 @@ do
     if [[ $opcao =~ $ren1 ]]; then
         if [[ $opcao -eq 1 ]]; then
             clear
-            cat teste.txt
+            cat registo_das_vitorias.txt
             break
         elif [[ $opcao -eq 2 ]]; then
             clear
@@ -38,24 +37,28 @@ do
                         read palpite
                         clear
                         if [[ $palpite =~ $ren ]]; then
-                            if [[ $tentativa -ne 20 ]]; then
-                                if [[ $palpite -eq $numero ]]; then
-                                    clear
-                                    echo "$nome, você ganhou! Parabéns, conseguiu em $tentativa tentativas!"
-                                    echo "$nome conseguiu em $tentativa tentativas, e o número era $palpite no modo facil no dia $(date +'%Y-%m-%d') as $(date +'%H:%M:%S')" >> registo_das_vitorias.txt
-                                    break
-                                elif [[ $palpite -lt $numero ]]; then
-                                    clear
-                                    echo "Seu palpite foi $palpite, no entanto, o número é maior."
+                            if (( $palpite >= 0 && $palpite <= 150 )); then
+                                if [[ $tentativa -ne 20 ]]; then
+                                    if [[ $palpite -eq $numero ]]; then
+                                        clear
+                                        echo "$nome, você ganhou! Parabéns, conseguiu em $tentativa tentativas!"
+                                        echo "$nome conseguiu em $tentativa tentativas, e o número era $palpite no modo facil no dia $(date +'%Y-%m-%d') as $(date +'%H:%M:%S')" >> registo_das_vitorias.txt
+                                        break
+                                    elif [[ $palpite -lt $numero ]]; then
+                                        clear
+                                        echo "Seu palpite foi $palpite, no entanto, o número é maior."
+                                    else
+                                        clear
+                                        echo "Seu palpite foi $palpite, no entanto, o número é menor."
+                                    fi
+                                    tentativa=$((tentativa + 1))
                                 else
                                     clear
-                                    echo "Seu palpite foi $palpite, no entanto, o número é menor."
+                                    echo "$nome, você perdeu. Excedeu o número máximo de tentativas."
+                                    break
                                 fi
-                                tentativa=$((tentativa + 1))
                             else
-                                clear
-                                echo "$nome, você perdeu. Excedeu o número máximo de tentativas."
-                                break
+                                echo "Número fora do intervalo 0 a 100. Tente novamente."
                             fi
                         else
                             clear
@@ -83,29 +86,33 @@ do
                         clear
 
                         if [[ $palpite1 =~ $ren ]]; then
-                            if [[ $tentativa -ne 10 ]]; then
-                                if [[ $palpite1 -eq $numero_hard ]]; then
-                                    clear
-                                    echo "$nome, você ganhou! Parabéns, conseguiu em $tentativa tentativas!"
-                                    echo "$nome conseguiu em $tentativa tentativas, e o número era $palpite1 no mode hard no dia $(date +'%Y-%m-%d') as $(date +'%H:%M:%S')" >> registo_das_vitorias.txt
-                                    break
-                                elif [[ $palpite1 -lt $numero_hard ]]; then
-                                    clear
-                                    menor=$palpite1
-                                    echo "Seu palpite foi $palpite1, no entanto, o número é maior."
+                            if (( $palpite1 >= 0 && $palpite1 <= 150 )); then
+                                if [[ $tentativa -ne 10 ]]; then
+                                    if [[ $palpite1 -eq $numero_hard ]]; then
+                                        clear
+                                        echo "$nome, você ganhou! Parabéns, conseguiu em $tentativa tentativas!"
+                                        echo "$nome conseguiu em $tentativa tentativas, e o número era $palpite1 no mode hard no dia $(date +'%Y-%m-%d') as $(date +'%H:%M:%S')" >> registo_das_vitorias.txt
+                                        break
+                                    elif [[ $palpite1 -lt $numero_hard ]]; then
+                                        clear
+                                        menor=$((palpite1 + 1))
+                                        echo "Seu palpite foi $palpite1, no entanto, o número é maior."
+                                        echo "$numero_hard"
+                                    else
+                                        clear
+                                        maior=$((palpite1 - 1))
+                                        echo "Seu palpite foi $palpite1, no entanto, o número é menor."
+                                        echo "$numero_hard"
+                                    fi
+                                    numero_hard=$((RANDOM % ($maior - $menor + 1) + $menor))
                                     tentativa=$((tentativa + 1))
                                 else
                                     clear
-                                    maior=$palpite1
-                                    echo "Seu palpite foi $palpite1, no entanto, o número é menor."
-                                    tentativa=$((tentativa + 1))
+                                    echo "$nome, você perdeu. Excedeu o número máximo de tentativas."
+                                    break
                                 fi
-
-                                numero_hard=$((RANDOM % ($maior - $menor + 1) + $menor))
                             else
-                                clear
-                                echo "$nome, você perdeu. Excedeu o número máximo de tentativas."
-                                break
+                                echo "Número fora do intervalo de 0 a 150. Tente novamente."
                             fi
                         else
                             clear
