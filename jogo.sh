@@ -37,7 +37,7 @@ do
                         read palpite
                         clear
                         if [[ $palpite =~ $ren ]]; then
-                            if (( $palpite >= 0 && $palpite <= 150 )); then
+                            if (( $palpite >= 0 && $palpite <= 100 )); then
                                 if [[ $tentativa -ne 20 ]]; then
                                     if [[ $palpite -eq $numero ]]; then
                                         clear
