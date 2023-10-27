@@ -1,12 +1,11 @@
 #!/bin/bash
 
 numero=$((RANDOM % 100 + 1))
-palpite=0
 tentativa=1
 maior=150
 menor=1
 
-ren1=^[0-3]$
+ren1=^[1-3]$
 ren=^[0-9]+$
 rem=^[A-Z][a-z]+$
 
@@ -97,12 +96,10 @@ do
                                         clear
                                         menor=$((palpite1 + 1))
                                         echo "Seu palpite foi $palpite1, no entanto, o número é maior."
-                                        echo "$numero_hard"
                                     else
                                         clear
                                         maior=$((palpite1 - 1))
                                         echo "Seu palpite foi $palpite1, no entanto, o número é menor."
-                                        echo "$numero_hard"
                                     fi
                                     numero_hard=$((RANDOM % ($maior - $menor + 1) + $menor))
                                     tentativa=$((tentativa + 1))
